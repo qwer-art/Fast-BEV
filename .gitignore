@@ -156,3 +156,7 @@ figs
 envs/
 tools/quant
 **/quant
+
+.pre-commit-config.yaml
+
+.readthedocs.yml
