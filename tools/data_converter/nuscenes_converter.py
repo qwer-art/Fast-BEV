@@ -62,6 +62,7 @@ def create_nuscenes_infos(root_path,
     train_scenes = list(
         filter(lambda x: x in available_scene_names, train_scenes))
     val_scenes = list(filter(lambda x: x in available_scene_names, val_scenes))
+    ### [1].set(tokens)
     train_scenes = set([
         available_scenes[available_scene_names.index(s)]['token']
         for s in train_scenes
@@ -77,6 +78,7 @@ def create_nuscenes_infos(root_path,
     else:
         print('train scene: {}, val scene: {}'.format(
             len(train_scenes), len(val_scenes)))
+    ### [2].list(frame)
     train_nusc_infos, val_nusc_infos = _fill_trainval_infos(
         nusc, train_scenes, val_scenes, test, max_sweeps=max_sweeps)
 
@@ -91,10 +93,12 @@ def create_nuscenes_infos(root_path,
         print('train sample: {}, val sample: {}'.format(
             len(train_nusc_infos), len(val_nusc_infos)))
         data = dict(infos=train_nusc_infos, metadata=metadata)
+        ### [3].serial train_info->/home/zyt/Data/FastBev/v1.0-mini/nuscenes_infos_train.pkl
         info_path = osp.join(root_path,
                              '{}_infos_train.pkl'.format(info_prefix))
         mmcv.dump(data, info_path)
         data['infos'] = val_nusc_infos
+        ### [3].serial val_info->/home/zyt/Data/FastBev/v1.0-mini/nuscenes_infos_val.pkl
         info_val_path = osp.join(root_path,
                                  '{}_infos_val.pkl'.format(info_prefix))
         mmcv.dump(data, info_val_path)
