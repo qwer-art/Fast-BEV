@@ -5,18 +5,25 @@ from nuscenes import NuScenes
 import numpy as np
 from pyquaternion import Quaternion
 import ipdb
-
+from os import path as osp
+import sys
+project_root = osp.dirname(osp.dirname(osp.dirname(osp.abspath(__file__))))
+sys.path.append(project_root)
 
 def add_adj_info():
     interval = 3
     max_adj = 60
     sample_num = None
     for set in ['test', 'val', 'train', ]:
-        if set in ['val', 'train']:
+        if set in ['test']:
             continue
-        dataset = pickle.load(open('./data/nuscenes/nuscenes_infos_%s.pkl' % set, 'rb'))
+        # if set in ['val', 'train']:
+        #     continue
+        file_path = osp.join(project_root,'./data/nuscenes/nuscenes_infos_%s.pkl' % set)
+        dataset = pickle.load(open(file_path, 'rb'))
         if set in ['train', 'val']:
-            nuscenes_version = 'v1.0-trainval'
+            # nuscenes_version = 'v1.0-trainval'
+            nuscenes_version = 'v1.0-mini'
         else:
             nuscenes_version = 'v1.0-test'
         dataroot = './data/nuscenes/'
@@ -104,6 +111,9 @@ def add_adj_info():
                 dataset['infos'][id]['gt_velocity'] = dataset['infos'][id]['gt_velocity'] - velocity_lidar.reshape(1, 2)
 
         filename = './data/nuscenes/nuscenes_infos_%s_4d_interval%d_max%d.pkl' % (set, interval, max_adj)
+        print(f"project_root: {project_root}")
+        filename = osp.join(project_root,filename)
+        print(f"filename: {filename}")
         if sample_num is not None:
             filename = filename.replace('.pkl', f'_sample{sample_num}.pkl')
         with open(filename, 'wb') as fid:
