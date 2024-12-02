@@ -11,6 +11,9 @@ import warnings
 from mmcv import Config, DictAction
 from mmcv.runner import get_dist_info, init_dist
 from os import path as osp
+import sys
+project_root = osp.dirname(osp.dirname(osp.abspath(__file__)))
+sys.path.append(project_root)
 
 mmdet3d_root = os.environ.get('MMDET3D')
 if mmdet3d_root is not None and osp.exists(mmdet3d_root):
